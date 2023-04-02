@@ -65,3 +65,38 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 }
 
 
+
+// updateUser updates a user by ID
+func updateUser(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+
+	for index, user := range users {
+		if user.ID == params["id"] {
+			users[index].Name = params["name"]
+			users[index].Email = params["email"]
+			users[index].Password = params["password"]
+			json.NewEncoder(w).Encode(users[index])
+			return
+		}
+	}
+	fmt.Println("->>>>>",users)
+
+	json.NewEncoder(w).Encode(users)
+}
+
+// deleteUser deletes a user by ID
+func deleteUser(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+
+	for index, user := range users {
+		if user.ID == params["id"] {
+			users = append(users[:index], users[index+1:]...)
+			break
+		}
+	}
+
+	json.NewEncoder(w).Encode(users)
+}
+
+
+
